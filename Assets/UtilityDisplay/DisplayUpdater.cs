@@ -4,7 +4,6 @@ using System.Collections;
 [ExecuteInEditMode]
 [RequireComponent(typeof(UtilityDisplay))]
 public class DisplayUpdater : MonoBehaviour {
-	UtilityDisplay.DisplayInfo fpsInfo;
 	UtilityDisplay.DisplayInfo unityInfo;
 
 	// Use this for initialization
@@ -14,24 +13,9 @@ public class DisplayUpdater : MonoBehaviour {
 
 	void GetSections() {
 		UtilityDisplay display = GetComponent<UtilityDisplay>();
-		fpsInfo = display.GetSectionById("fps");
-		fpsInfo.anchor = TextAnchor.UpperCenter;
-
 		unityInfo = display.GetSectionById("unity");
 		unityInfo.anchor = TextAnchor.LowerLeft;
 	}
-
-	float deltaTime = 0.0f;
-	void Update() {
-		deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-
-		float msec = deltaTime * 1000f;
-		float fps = 1f / deltaTime;
-		fpsInfo.text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
-		fpsInfo.textSize = (int)(Screen.height / 25f);
-		fpsInfo.color = fps < 30f ? Color.red : Color.green;
-	}
-
 
 	#if UNITY_EDITOR
 	void OnValidate() {
@@ -40,6 +24,7 @@ public class DisplayUpdater : MonoBehaviour {
 			+ UnityEditor.EditorUserBuildSettings.activeBuildTarget +"\n"
 //			+ GetConsoleOutput()+"\n"
 			+ GetFileContent("test.txt")+"\n"
+			+ string.Join(" ", System.Environment.GetCommandLineArgs())+"\n"
 			+ System.Environment.GetEnvironmentVariable("PATH");
 		Debug.Log("OnValidate "+UnityEditor.EditorUserBuildSettings.activeBuildTarget+" "+UnityEditor.BuildPipeline.isBuildingPlayer);
 //		RunCMD();
