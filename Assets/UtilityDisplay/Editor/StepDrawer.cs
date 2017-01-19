@@ -9,17 +9,17 @@ namespace AdVd {
 	public class StepDrawer : Editor {
 		ReorderableList rList;
 		SerializedProperty maxStepDelayProp;
-		InputSequence sequence;
+		SerializedProperty maxSwipeLengthProp;
 
 		public void OnEnable() {
 			rList = new ReorderableList(serializedObject, serializedObject.FindProperty("steps"), true, true, true, true);
-			sequence = target as InputSequence;
 
 			rList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, new GUIContent("Steps"));
 			rList.drawElementCallback = (rect, index, active, focused) => StepGUI(rect, rList.serializedProperty.GetArrayElementAtIndex(index));
 			rList.elementHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
 			maxStepDelayProp = serializedObject.FindProperty("maxStepDelay");
+			maxSwipeLengthProp = serializedObject.FindProperty("maxSwipeLength");
 		}
 
 
@@ -28,6 +28,7 @@ namespace AdVd {
 			serializedObject.Update();
 			rList.DoLayoutList();
 			EditorGUILayout.PropertyField(maxStepDelayProp);
+			EditorGUILayout.PropertyField(maxSwipeLengthProp);
 			serializedObject.ApplyModifiedProperties();
 		}
 
@@ -63,10 +64,6 @@ namespace AdVd {
 				EditorGUI.PropertyField(vRect, v0, new GUIContent("X"));
 				vRect.x+=vRect.width;
 				EditorGUI.PropertyField(vRect, v1, new GUIContent("Y"));
-				break;
-			case StepType.RotateSwipe:
-				EditorGUI.LabelField(labelRect, new GUIContent("Rotation"));
-				EditorGUI.PropertyField(vRect, v0, new GUIContent(" "));
 				break;
 			}
 			EditorGUIUtility.labelWidth = currentLabelWidth;

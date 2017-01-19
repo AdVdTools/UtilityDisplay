@@ -4,8 +4,7 @@ namespace AdVd {
 	public enum StepType { 
 		Tap,// v0: min length, v1: max length
 		Delay,// v0: min length, v1: max length 
-		Swipe,// (v0, v1): main direction & distance
-		RotateSwipe// v0: rotation, v1?
+		Swipe// (v0, v1): main direction & distance
 	}
 	[System.Serializable]
 	public class Step {
@@ -21,5 +20,6 @@ namespace AdVd {
 		public Step[] steps;
 
 		public float maxStepDelay = 0.25f;
+		public float maxSwipeLength = 1f;
 	}
 }

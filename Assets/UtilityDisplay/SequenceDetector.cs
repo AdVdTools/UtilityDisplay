@@ -78,7 +78,11 @@ namespace AdVd {
 						float dot = delta.x*current.v0 + delta.y*current.v1;
 						float cross = delta.x*current.v1 - delta.y*current.v0;
 
-						if (dist2 > v2) {
+						if (currentTime > lastEventTime + sequence.maxSwipeLength) {
+							stepState = StepState.Failure;
+							lastEventTime = currentTime;
+						}
+						else if (dist2 > v2) {
 							if (cross*cross > dot*dot || dot < 0) {//Failed
 								stepState = StepState.Failure;
 							}
@@ -90,42 +94,20 @@ namespace AdVd {
 							}
 							lastEventTime = currentTime;
 						}
-
-//						if (!mouse) {
-//							if (cross*cross > dot*dot || dot < 0) {//Failed
-//								currentStep = -1;
-//							}
-//							else if (dist2 > v2) {//Success
-//								currentStep++;
-//							}
-//							lastEventTime = currentTime;
-//							stepRunning = false;
-//						}
-//						break;
-
-//						if ((!mouse && swipeState) ||){
-//							if (currentTime < lastEventTime + sequence.minDelayLength) {//Failed
-//								currentStep = -1;
-//							}
-//							else {
-//								currentStep++;
-//							}
-//							lastEventTime = currentTime;
-//							stepRunning = false;
-//						}
 					}
 					break;
 				}
-				Debug.Log(current.type.ToString()+"_"+stepState.ToString());
+//				Debug.Log(current.type.ToString()+"_"+stepState.ToString());
 				if (stepState == StepState.Success) {
 					currentStep++;
 					stepState = StepState.Waiting;
 				}
 				else if (stepState == StepState.Failure) {
 					currentStep = -1;
-					stepState = StepState.Waiting;
+					if (!mouse) {
+						stepState = StepState.Waiting;
+					}
 				}
-
 
 				if (currentStep >= sequence.steps.Length) {
 					currentStep = 0;
